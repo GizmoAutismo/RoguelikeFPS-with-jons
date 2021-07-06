@@ -14,7 +14,6 @@ public class gun : MonoBehaviour
     public float reloadSpeed;
     public bool isSemi;
 
-
     [Header("Attachment stuff")]
     public List<AttachmentScripts> sightsObj = new List<AttachmentScripts>();
 
@@ -38,7 +37,8 @@ public class gun : MonoBehaviour
 
     [Header("other stuff, bullets etc")]
     private bool canfire = true;
-    bool isReloading = false;
+
+    private bool isReloading = false;
     public GameObject bullet;
 
     // Update is called once per frame
@@ -174,35 +174,30 @@ public class gun : MonoBehaviour
     {
         if (currentAmmo <= 0)
         {
-           
-           StopCoroutine("AutoFire");
+            StopCoroutine("AutoFire");
             canfire = false;
-           if(currentMag != null && isReloading != true)
+            if (currentMag != null && isReloading != true)
             {
                 StartCoroutine(Reload());
                 isReloading = true;
             }
-           
+
             return;
         }
         if (Input.GetMouseButton(0))
         {
-           
-
             if (!canfire)
             {
                 canfire = true;
                 StartCoroutine("AutoFire");
                 canfire = true;
             }
-          
         }
-       
+
         if (Input.GetMouseButtonUp(0))
         {
             StopCoroutine("AutoFire");
             canfire = false;
-            
         }
     }
 
@@ -210,19 +205,13 @@ public class gun : MonoBehaviour
     {
         while (canfire == true && !Input.GetMouseButtonUp(0))
         {
-           
             Fire();
             currentAmmo--;
             if (isSemi)
             {
                 yield break;
-
             }
             yield return new WaitForSeconds(fireRate);
-      
-            
-
-
         }
     }
 
@@ -237,8 +226,6 @@ public class gun : MonoBehaviour
             StopCoroutine("AutoFire");
             yield break;
         }
-       
-        
     }
 
     private void Fire()
@@ -248,6 +235,5 @@ public class gun : MonoBehaviour
         GameObject newBullet = Instantiate(bullet, muzzleoffset, Quaternion.Euler(player.transform.rotation.eulerAngles)) as GameObject;
         Bullet thisBullet = newBullet.GetComponent<Bullet>();
         thisBullet.BulletStats(damage, velocity);
-       
     }
 }
